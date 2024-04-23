@@ -26,6 +26,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git author
+        run: |
+          git config --global user.name "OpenFisca Bot"
+          git config --global user.email "bot@openfisca.org"
           
       - name: Execute the bootstrap script
         run: JURISDICTION_NAME="${{ github.event.repository.name }}" REPOSITORY_URL="${{ github.repositoryUrl }}" ./bootstrap.sh
