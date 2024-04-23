@@ -61,10 +61,10 @@ last_changelog_number=$(grep --line-number '^# Example Entry' CHANGELOG.md | cut
 first_commit_message='Initial import from OpenFisca country-template'
 second_commit_message='Customise country-template through script'
 
-echo
-cd ..
-mv $parent_folder openfisca-$NO_SPACES_JURISDICTION_LABEL
-cd openfisca-$NO_SPACES_JURISDICTION_LABEL
+# echo
+# cd ..
+# mv $parent_folder openfisca-$NO_SPACES_JURISDICTION_LABEL
+# cd openfisca-$NO_SPACES_JURISDICTION_LABEL
 
 # echo -e "${PURPLE}*  ${PURPLE}Initialise git repository\033[0m"
 # git init --initial-branch=main > /dev/null 2>&1
