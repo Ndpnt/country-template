@@ -11,6 +11,10 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
+      - name: Print GitHub Variables
+        run: |
+          echo "GitHub Event:"
+          echo "${{ toJson(github) }}"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Set up Python
