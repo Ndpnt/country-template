@@ -22,13 +22,15 @@ jobs:
     if: ${{ !github.event.repository.is_template && !github.event.repository.fork && github.run_number == 1 }}
     runs-on: ubuntu-latest
     steps:
-      - name: Print GitHub Event Variables
-        run: |
-          echo "GitHub Event:"
-          echo "${{ toJson(github.event) }}"
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Execute the bootstrap script
+        run: JURISDICTION_NAME="${{ github.event.repository.name }}" REPOSITORY_URL="${{ github.repositoryUrl }}" ./bootstrap.sh
 
-      - name: Print GitHub Variables
-        run: |
-          echo "GitHub Event:"
-          echo "${{ toJson(github) }}"
-
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Adapt template automatically"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
