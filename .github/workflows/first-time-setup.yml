@@ -4,8 +4,6 @@ run-name: Setup
 on:
   # Run when repo is generated from template
   create:
-  # Manual trigger
-  workflow_dispatch:
 
 # Only keep latest run of this workflow
 concurrency:
@@ -20,7 +18,7 @@ permissions:
 
 jobs:
   first-time-setup:
-    # Esnure this workflow does not run on the template repository or when the repository is forked
+    # Ensure this workflow does not run on the template repository or when the repository is forked
     if: ${{ !github.event.repository.is_template && !github.event.repository.fork }}
     runs-on: ubuntu-latest
     steps:
