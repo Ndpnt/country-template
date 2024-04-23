@@ -32,9 +32,6 @@ jobs:
           git config --global user.name "OpenFisca Bot"
           git config --global user.email "bot@openfisca.org"
 
-      - name: Remove first time setup workflow
-        run: rm -f .github/workflows/first-time-setup.yml
-
       - name: Execute the bootstrap script
         run: CI=true JURISDICTION_NAME="$(echo ${{ github.event.repository.name }} | sed 's/openfisca-//')" REPOSITORY_URL="${{ github.repositoryUrl }}" ./bootstrap.sh
 
