@@ -4,6 +4,8 @@ run-name: Setup
 on:
   # Run when repo is generated from template
   create:
+  # Manual trigger
+  workflow_dispatch:
 
 # Only keep latest run of this workflow
 concurrency:
