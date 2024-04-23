@@ -20,6 +20,11 @@ jobs:
   first-time-setup:
     runs-on: ubuntu-latest
     steps:
+      - name: Print GitHub Event Variables
+        run: |
+          echo "GitHub Event:"
+          echo "${{ toJson(github.event) }}"
+
       - name: Check if repository is a fork
         if: github.event.repository.fork
         run: |
