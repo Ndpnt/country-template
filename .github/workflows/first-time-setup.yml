@@ -18,8 +18,8 @@ permissions:
 
 jobs:
   first-time-setup:
-    # Ensure this workflow does not run on the template repository or when the repository is forked
-    if: ${{ !github.event.repository.is_template && !github.event.repository.fork }}
+    # Ensure this job does not run on the template repository or when the repository is forked and ensure it is run only once
+    if: ${{ !github.event.repository.is_template && !github.event.repository.fork && github.run_number == 1 }}
     runs-on: ubuntu-latest
     steps:
       - name: Print GitHub Event Variables
