@@ -31,12 +31,12 @@ jobs:
         run: |
           git config --global user.name "OpenFisca Bot"
           git config --global user.email "bot@openfisca.org"
-          
-      - name: Execute the bootstrap script
-        run: JURISDICTION_NAME="${{ github.event.repository.name }}" REPOSITORY_URL="${{ github.repositoryUrl }}" ./bootstrap.sh
 
       - name: Remove first time setup workflow
         run: rm -f .github/workflows/first-time-setup.yml
+
+      - name: Execute the bootstrap script
+        run: JURISDICTION_NAME="${{ github.event.repository.name }}" REPOSITORY_URL="${{ github.repositoryUrl }}" ./bootstrap.sh
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
