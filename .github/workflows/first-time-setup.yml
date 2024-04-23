@@ -20,6 +20,8 @@ permissions:
 
 jobs:
   first-time-setup:
+    # Esnure this workflow does not run on the template repository or when the repository is forked
+    if: ${{ !github.event.repository.is_template && !github.event.repository.fork }}
     runs-on: ubuntu-latest
     steps:
       - name: Print GitHub Event Variables
@@ -27,12 +29,8 @@ jobs:
           echo "GitHub Event:"
           echo "${{ toJson(github.event) }}"
 
-      - name: Check if repository is a fork
-        if: github.event.repository.fork
+      - name: Print GitHub Variables
         run: |
-          echo "This repository was created by forking another repository."
-      
-      - name: Check if repository was created from a template
-        if: github.event.repository.is_template
-        run: |
-          echo "This repository was created from a template."
+          echo "GitHub Event:"
+          echo "${{ toJson(github) }}"
+
