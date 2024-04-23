@@ -18,9 +18,6 @@ permissions:
 
 jobs:
   first-time-setup:
-    # Ensure this action is run only once
-    if: github.run_number == 1
-
     runs-on: ubuntu-latest
     steps:
       - name: Check if repository is a fork
