@@ -11,13 +11,16 @@ if [[ $JURISDICTION_NAME ]] && [[ $REPOSITORY_URL ]]
 then continue=Y
 fi
 
-# if [[ -d .git ]]
-# then
-# 	echo 'It seems you cloned this repository, or already initialised it.'
-# 	echo 'Refusing to go further as you might lose work.'
-# 	echo "If you are certain this is a new repository, run 'cd $(dirname $0) && rm -rf .git' to erase the history."
-# 	exit 2
-# fi
+if [ -z "$CI" ] || [ "$CI" != "true" ]
+then
+	if [[ -d .git ]]
+	then
+		echo 'It seems you cloned this repository, or already initialised it.'
+		echo 'Refusing to go further as you might lose work.'
+		echo "If you are certain this is a new repository, run 'cd $(dirname $0) && rm -rf .git' to erase the history."
+		exit 2
+	fi
+fi
 
 while [[ ! "$JURISDICTION_NAME" ]]
 do
@@ -61,17 +64,20 @@ last_changelog_number=$(grep --line-number '^# Example Entry' CHANGELOG.md | cut
 first_commit_message='Initial import from OpenFisca country-template'
 second_commit_message='Customise country-template through script'
 
-# echo
-# cd ..
-# mv $parent_folder openfisca-$NO_SPACES_JURISDICTION_LABEL
-# cd openfisca-$NO_SPACES_JURISDICTION_LABEL
+if [ -z "$CI" ] || [ "$CI" != "true" ]
+then
+	echo
+	cd ..
+	mv $parent_folder openfisca-$NO_SPACES_JURISDICTION_LABEL
+	cd openfisca-$NO_SPACES_JURISDICTION_LABEL
 
-# echo -e "${PURPLE}*  ${PURPLE}Initialise git repository\033[0m"
-# git init --initial-branch=main > /dev/null 2>&1
-# git add .
+	echo -e "${PURPLE}*  ${PURPLE}Initialise git repository\033[0m"
+	git init --initial-branch=main > /dev/null 2>&1
+	git add .
 
-# git commit --no-gpg-sign --message "$first_commit_message" --author='OpenFisca Bot <bot@openfisca.org>' --quiet
-# echo -e "${PURPLE}*  ${PURPLE}Initial git commit made to 'main' branch: '\033[0m${BLUE}$first_commit_message\033[0m${PURPLE}'\033[0m"
+	git commit --no-gpg-sign --message "$first_commit_message" --author='OpenFisca Bot <bot@openfisca.org>' --quiet
+	echo -e "${PURPLE}*  ${PURPLE}Initial git commit made to 'main' branch: '\033[0m${BLUE}$first_commit_message\033[0m${PURPLE}'\033[0m"
+fi
 
 all_module_files=`find openfisca_country_template -type f ! -name "*.DS_Store"`
 echo -e "${PURPLE}*  ${PURPLE}Replace default country_template references\033[0m"
@@ -101,20 +107,24 @@ git mv openfisca_country_template $package_name
 echo -e "${PURPLE}*  ${PURPLE}Remove single use \033[0m${BLUE}bootstrap.sh\033[0m${PURPLE} script\033[0m"
 git rm bootstrap.sh > /dev/null 2>&1
 
-# git add .
-# git commit --no-gpg-sign --message "$second_commit_message" --author='OpenFisca Bot <bot@openfisca.org>' --quiet
 
-# echo -e "${PURPLE}*  ${PURPLE}Second git commit made to 'main' branch: '\033[0m${BLUE}$second_commit_message\033[0m${PURPLE}'\033[0m"
-# echo
+if [ -z "$CI" ] || [ "$CI" != "true" ]
+then
+	git add .
+	git commit --no-gpg-sign --message "$second_commit_message" --author='OpenFisca Bot <bot@openfisca.org>' --quiet
 
-# git remote add origin $REPOSITORY_URL.git
+	echo -e "${PURPLE}*  ${PURPLE}Second git commit made to 'main' branch: '\033[0m${BLUE}$second_commit_message\033[0m${PURPLE}'\033[0m"
+	echo
 
-# cd ../openfisca-$NO_SPACES_JURISDICTION_LABEL
+	git remote add origin $REPOSITORY_URL.git
 
-# echo -e "${YELLOW}* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \033[0m"
-# echo -e "${YELLOW}*\033[0m"
-# echo -e "${YELLOW}*\033[0m  Bootstrap complete, you can now push to remote repository with '${BLUE}git push origin main\033[0m'"
-# echo -e "${YELLOW}*\033[0m  Then refer to the \033[0m${BLUE}README.md\033[0m"
-# echo -e "${YELLOW}*\033[0m  The parent directory name has been changed, you can use ${BLUE}cd ..\033[0m to navigate again to it"
-# echo -e "${YELLOW}*\033[0m"
-# echo -e "${YELLOW}* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \033[0m"
+	cd ../openfisca-$NO_SPACES_JURISDICTION_LABEL
+
+	echo -e "${YELLOW}* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \033[0m"
+	echo -e "${YELLOW}*\033[0m"
+	echo -e "${YELLOW}*\033[0m  Bootstrap complete, you can now push to remote repository with '${BLUE}git push origin main\033[0m'"
+	echo -e "${YELLOW}*\033[0m  Then refer to the \033[0m${BLUE}README.md\033[0m"
+	echo -e "${YELLOW}*\033[0m  The parent directory name has been changed, you can use ${BLUE}cd ..\033[0m to navigate again to it"
+	echo -e "${YELLOW}*\033[0m"
+	echo -e "${YELLOW}* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * \033[0m"
+fi
