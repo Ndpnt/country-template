@@ -11,13 +11,13 @@ if [[ $JURISDICTION_NAME ]] && [[ $REPOSITORY_URL ]]
 then continue=Y
 fi
 
-if [[ -d .git ]]
-then
-	echo 'It seems you cloned this repository, or already initialised it.'
-	echo 'Refusing to go further as you might lose work.'
-	echo "If you are certain this is a new repository, run 'cd $(dirname $0) && rm -rf .git' to erase the history."
-	exit 2
-fi
+# if [[ -d .git ]]
+# then
+# 	echo 'It seems you cloned this repository, or already initialised it.'
+# 	echo 'Refusing to go further as you might lose work.'
+# 	echo "If you are certain this is a new repository, run 'cd $(dirname $0) && rm -rf .git' to erase the history."
+# 	exit 2
+# fi
 
 while [[ ! "$JURISDICTION_NAME" ]]
 do
