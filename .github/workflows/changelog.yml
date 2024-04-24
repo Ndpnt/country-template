@@ -26,10 +26,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Fetch all the tags
+      
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9.9
+      
       - name: Check version number has been properly updated
         run: "${GITHUB_WORKSPACE}/.github/is-version-number-acceptable.sh"
 
@@ -46,9 +48,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Fetch all the tags
+      
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9.9
+      
       - id: stop-early
         run: if "${GITHUB_WORKSPACE}/.github/has-functional-changes.sh" ; then echo "::set-output name=status::success" ; fi
