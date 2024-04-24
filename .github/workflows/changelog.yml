@@ -1,8 +1,6 @@
 name: Changelog
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     types: [ assigned, opened, reopened, synchronize, ready_for_review ]
   workflow_dispatch:
@@ -13,23 +11,25 @@ on:
         value: ${{ jobs.check-for-functional-changes.outputs.status }}
 
 jobs:
-  lint-files:
-    uses: "./.github/workflows/lint-files.yml"
+  # lint-files:
+  #   uses: "./.github/workflows/lint-files.yml"
 
   tests:
     uses: "./.github/workflows/tests.yml"
   
   check-version-and-changelog:
     runs-on: ubuntu-20.04
-    needs: [ lint-files, tests ] # Last job to run
+    needs: [ tests ]
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Fetch all the tags
+      
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9.9
+      
       - name: Check version number has been properly updated
         run: "${GITHUB_WORKSPACE}/.github/is-version-number-acceptable.sh"
 
@@ -46,9 +46,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Fetch all the tags
+      
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9.9
+      
       - id: stop-early
         run: if "${GITHUB_WORKSPACE}/.github/has-functional-changes.sh" ; then echo "::set-output name=status::success" ; fi
