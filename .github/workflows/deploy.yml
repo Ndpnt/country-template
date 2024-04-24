@@ -1,11 +1,10 @@
 name: Deploy
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    types: [ assigned, opened, reopened, synchronize, ready_for_review ]
-  workflow_dispatch:
+  pull_request_target:
+    branches: 
+      - main
+    types: [ closed ]
 
 jobs:
   changelog:

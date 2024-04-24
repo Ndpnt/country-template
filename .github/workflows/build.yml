@@ -1,11 +1,6 @@
 name: Build
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    types: [ assigned, opened, reopened, synchronize, ready_for_review ]
-  workflow_dispatch:
   workflow_call:
 
 jobs:
