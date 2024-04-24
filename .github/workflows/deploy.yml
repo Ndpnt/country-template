@@ -1,22 +1,15 @@
 name: Deploy
 
 on:
-  pull_request_target:
-    branches: 
-      - main
-      - master
-    types: [ closed ]
+  workflow_run:
+    workflows:
+      - Build
+      - Tests
+      - Lint
+    types:
+      - completed
 
 jobs:
-  lint:
-    uses: "./.github/workflows/lint.yml"
-
-  tests:
-    uses: "./.github/workflows/tests.yml"
-
-  changelog:
-    uses: "./.github/workflows/changelog.yml"
-
   # GitHub Actions does not have a halt job option, to stop from deploying if no functional changes were found.
   # We build a separate job to substitute the halt option.
   # The `deploy` job is dependent on the output of the `check-for-functional-changes` job.
@@ -39,7 +32,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-20.04
-    needs: [ lint, tests, changelog, check-for-functional-changes ]
+    needs: [ check-for-functional-changes ]
     if: github.event.pull_request.merged == true && needs.check-for-functional-changes.outputs.status == 'success'
     env:
       PYPI_USERNAME: openfisca-bot
