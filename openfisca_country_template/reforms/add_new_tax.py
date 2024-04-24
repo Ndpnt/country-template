@@ -20,7 +20,7 @@ class has_car(Variable):
     entity = Person
     default_value = True
     definition_period = MONTH
-    label = "The person has a car - TEST"
+    label = "The person has a car"
     reference = "https://law.gov.example/new_tax"  # Always use the most official source
 
 

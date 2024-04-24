@@ -1,4 +1,4 @@
-# OpenFisca Country-Template Test
+# OpenFisca Country-Template
 
 This repository helps you quickly bootstrap and use your own OpenFisca country package.
 
