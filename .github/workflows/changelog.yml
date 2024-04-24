@@ -11,15 +11,15 @@ on:
         value: ${{ jobs.check-for-functional-changes.outputs.status }}
 
 jobs:
-  lint-files:
-    uses: "./.github/workflows/lint-files.yml"
+  # lint-files:
+  #   uses: "./.github/workflows/lint-files.yml"
 
   tests:
     uses: "./.github/workflows/tests.yml"
   
   check-version-and-changelog:
     runs-on: ubuntu-20.04
-    needs: [ lint-files, tests ] # Last job to run
+    needs: [ tests ]
     steps:
       - uses: actions/checkout@v2
         with:

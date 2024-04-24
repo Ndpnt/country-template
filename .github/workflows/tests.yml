@@ -1,4 +1,4 @@
-name: Tests
+name: Tests & Lint
 
 on:
   workflow_dispatch:
@@ -8,6 +8,36 @@ jobs:
   build:
     uses: "./.github/workflows/build.yml"
 
+  lint-files:
+    runs-on: ubuntu-20.04
+    needs: [ build ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Fetch all the tags
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.9
+      
+      - name: Cache build
+        id: restore-build
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.pythonLocation }}
+          key: build-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ github.sha }}
+      
+      - run: make check-syntax-errors
+      
+      - run: make check-style
+      
+      - name: Lint Python files
+        run: "${GITHUB_WORKSPACE}/.github/lint-changed-python-files.sh"
+      
+      - name: Lint YAML tests
+        run: "${GITHUB_WORKSPACE}/.github/lint-changed-yaml-tests.sh"
+  
   test-yaml:
     runs-on: ubuntu-20.04
     needs: [ build ]
