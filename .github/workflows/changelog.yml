@@ -1,0 +1,26 @@
+name: Changelog
+
+on:
+  workflow_run:
+    workflows:
+      - Build
+    types:
+      - completed
+
+jobs:
+  
+  check-version-and-changelog:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Fetch all the tags
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.9
+      
+      - name: Check version number has been properly updated
+        run: "${GITHUB_WORKSPACE}/.github/is-version-number-acceptable.sh"
+
