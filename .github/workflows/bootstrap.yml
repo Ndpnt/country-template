@@ -1,5 +1,4 @@
-name: first-time-setup
-run-name: Setup
+name: Bootstrap
 
 on:
   create:
@@ -10,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  first-time-setup:
+  bootstrap:
     # Ensure this job does not run:
     # - on the template repository 
     # - when forked
