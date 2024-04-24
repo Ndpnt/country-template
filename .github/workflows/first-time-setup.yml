@@ -2,23 +2,19 @@ name: first-time-setup
 run-name: Setup
 
 on:
-  # Run when repo is generated from template
   create:
-
-# Only keep latest run of this workflow
-concurrency:
-  group: first-time-setup
-  cancel-in-progress: true
 
 permissions: 
   actions: write
   checks: write
   contents: write
 
-
 jobs:
   first-time-setup:
-    # Ensure this job does not run on the template repository or when the repository is forked and ensure it is run only once
+    # Ensure this job does not run:
+    # - on the template repository 
+    # - when forked
+    # - it has already been executed once
     if: ${{ !github.event.repository.is_template && !github.event.repository.fork && github.run_number == 1 }}
     runs-on: ubuntu-latest
     steps:
