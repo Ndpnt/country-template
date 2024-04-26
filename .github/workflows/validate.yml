@@ -35,6 +35,17 @@ jobs:
         run: "${GITHUB_WORKSPACE}/.github/lint-changed-python-files.sh"
       - name: Lint YAML tests
         run: "${GITHUB_WORKSPACE}/.github/lint-changed-yaml-tests.sh"
+  
+  test-path-length:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9.9
+      - name: Test max path length
+        run: make check-path-length
 
   test-yaml:
     runs-on: ubuntu-20.04

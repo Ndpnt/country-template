@@ -42,6 +42,10 @@ check-style:
 	pylint `git ls-files | grep "\.py$$"`
 	yamllint `git ls-files | grep "\.yaml$$"`
 
+check-path-length:
+	@# Verify that there is no path exceeding Windows limit
+	python openfisca_france/scripts/check_path_length.py
+
 test: clean check-syntax-errors check-style
 	openfisca test --country-package openfisca_country_template openfisca_country_template/tests
 
