@@ -1,8 +1,11 @@
+"""
+This script fetches and prints the minimal versions of Openfisca-Core and Openfisca-France
+dependencies in order to ensure their compatibility during CI testing
+"""
+
 import re
 
-# This script fetches and prints the minimal versions of Openfisca-Core and Openfisca-France
-# dependencies in order to ensure their compatibility during CI testing
-with open('./pyproject.toml') as file:
+with open('./pyproject.toml', encoding="utf-8") as file:
     for line in file:
         version = re.search(r'openfisca-(core|france)(?:\[[\w-]+\])?\s*>=\s*([\d\.]+)', line)
         if version:
