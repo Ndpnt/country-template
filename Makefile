@@ -14,14 +14,16 @@ install: deps
 	@# Install OpenFisca-Extension-Template for development.
 	@# `make install` installs the editable version of openfisca-country_template.
 	@# This allows contributors to test as they code.
-	pip install --editable .[dev] --upgrade --use-deprecated=legacy-resolver
+	pip install --editable .[dev] --upgrade
+	pip install openfisca-core[web-api]
 
 build: clean deps
 	@# Install OpenFisca-Extension-Template for deployment and publishing.
 	@# `make build` allows us to be be sure tests are run against the packaged version
 	@# of OpenFisca-Extension-Template, the same we put in the hands of users and reusers.
 	python -m build
-	find dist -name "*.whl" -exec pip install --force-reinstall {}[dev] \;
+	find dist -name "*.whl" -exec pip install {}[dev] \;
+	pip install openfisca-core[web-api]
 
 check-syntax-errors:
 	python -m compileall -q .
