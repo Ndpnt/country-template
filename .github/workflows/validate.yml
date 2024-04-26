@@ -60,16 +60,9 @@ jobs:
           fail-on-cache-miss: true
           path: ${{ env.pythonLocation }}
           key: build-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-${{ github.sha }}-ubuntu-20.04-${{ matrix.openfisca-dependencies }}
-      - name: Split YAML tests
-        id: yaml-test
-        env:
-          CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
-          CI_NODE_INDEX: ${{ matrix.ci_node_index }}
-        run: |
-          echo "TEST_FILES_SUBLIST=$(python "${GITHUB_WORKSPACE}/.github/split_tests.py" ${CI_NODE_TOTAL} ${CI_NODE_INDEX})" >> $GITHUB_ENV
       - name: Run YAML test
-        run: |
-          openfisca test ${TEST_FILES_SUBLIST}
+        run: make test
+
 
   test-api:
     runs-on: ubuntu-20.04
