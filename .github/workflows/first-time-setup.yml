@@ -20,6 +20,6 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "Adapt template automatically"
+          commit_message: "Customise country-template through CI"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
