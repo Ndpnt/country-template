@@ -26,6 +26,7 @@ jobs:
       - name: Restore build
         uses: actions/cache@v3
         with:
+          fail-on-cache-miss: true
           path: ${{ env.pythonLocation }}
           key: build-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-${{ github.sha }}-ubuntu-20.04-${{ matrix.dependencies-version }}
       - run: make check-syntax-errors
@@ -56,6 +57,7 @@ jobs:
       - name: Restore build
         uses: actions/cache@v3
         with:
+          fail-on-cache-miss: true
           path: ${{ env.pythonLocation }}
           key: build-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-${{ github.sha }}-ubuntu-20.04-${{ matrix.openfisca-dependencies }}
       - name: Split YAML tests
