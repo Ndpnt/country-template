@@ -11,57 +11,88 @@ jobs:
 
   lint-files:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        dependencies-version: [maximal]
     needs: [ build ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Fetch all the tags
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9.9
       - name: Restore build
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
+          fail-on-cache-miss: true
           path: ${{ env.pythonLocation }}
-          key: build-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-${{ github.sha }}
+          key: build-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-${{ github.sha }}-ubuntu-20.04-${{ matrix.dependencies-version }}
       - run: make check-syntax-errors
       - run: make check-style
       - name: Lint Python files
         run: "${GITHUB_WORKSPACE}/.github/lint-changed-python-files.sh"
       - name: Lint YAML tests
         run: "${GITHUB_WORKSPACE}/.github/lint-changed-yaml-tests.sh"
+  
+  test-path-length:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9.9
+      - name: Test max path length
+        run: make check-path-length
 
   test-yaml:
     runs-on: ubuntu-20.04
     needs: [ build ]
+    strategy:
+      fail-fast: false
+      matrix:
+        # Set N number of parallel jobs to run tests on. Here we use 10 jobs
+        # Remember to update ci_node_index below to 0..N-1
+        ci_node_total: [ 10 ]
+        ci_node_index: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+        openfisca-dependencies: [minimal, maximal]
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9.9
       - name: Restore build
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
+          fail-on-cache-miss: true
           path: ${{ env.pythonLocation }}
-          key: build-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-${{ github.sha }}
-      - run: make test
+          key: build-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-${{ github.sha }}-ubuntu-20.04-${{ matrix.openfisca-dependencies }}
+      - name: Run YAML test
+        run: make test
+
 
   test-api:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        dependencies-version: [maximal]
     needs: [ build ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9.9
       - name: Restore build
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
+          fail-on-cache-miss: true
           path: ${{ env.pythonLocation }}
-          key: build-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-${{ github.sha }}
+          key: build-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-${{ github.sha }}-ubuntu-20.04-${{ matrix.dependencies-version }}
       - name: Test the Web API
         run: "${GITHUB_WORKSPACE}/.github/test-api.sh"
 
